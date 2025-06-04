@@ -1,0 +1,322 @@
+/* General Styles */
+body {
+    font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+    background-color: #faf8ef;
+    color: #776e65;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align items to the top */
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 100%;
+    max-width: 500px; /* Max width of the game */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Heading */
+.heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.title {
+    font-size: 60px; /* Larger title */
+    font-weight: bold;
+    margin: 0;
+    color: #776e65;
+}
+
+.scores-container {
+    display: flex;
+    gap: 10px; /* Space between score boxes */
+}
+
+.score-container, .best-container {
+    background-color: #bbada0;
+    color: white;
+    padding: 10px 20px; /* Adjusted padding */
+    border-radius: 3px;
+    font-size: 20px; /* Larger score font */
+    font-weight: bold;
+    text-align: center;
+    min-width: 60px; /* Minimum width for score boxes */
+}
+
+.score-container::before {
+    content: "SCORE";
+    display: block;
+    font-size: 10px; /* Smaller label */
+    color: #eee4da;
+    margin-bottom: 2px;
+}
+
+.best-container::before {
+    content: "BEST";
+    display: block;
+    font-size: 10px; /* Smaller label */
+    color: #eee4da;
+    margin-bottom: 2px;
+}
+
+/* Above Game Area */
+.above-game {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.game-intro {
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.restart-button {
+    background-color: #8f7a66;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 3px;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.restart-button:hover {
+    background-color: #7c6c5a;
+}
+
+/* Game Container */
+.game-container {
+    background-color: #bbada0;
+    border-radius: 6px;
+    padding: 15px;
+    position: relative; /* For positioning tiles and messages */
+    margin-bottom: 20px;
+    touch-action: none; /* Prevent default touch actions like scrolling */
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 15px; /* Gap between cells */
+}
+
+.grid-cell {
+    background-color: rgba(238, 228, 218, 0.35);
+    border-radius: 3px;
+    width: 100%; /* Make cell fill the grid column/row fraction */
+    padding-bottom: 100%; /* Aspect ratio 1:1 */
+    position: relative; /* For potential future use with tile animations */
+}
+
+/* Tiles */
+.tile-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 15px; /* Match game-container padding */
+    pointer-events: none; /* Tiles themselves don't capture events */
+}
+
+.tile {
+    position: absolute; /* Positioned relative to tile-container */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    border-radius: 3px;
+    font-size: 45px; /* Default font size, will adjust per tile value */
+    transition: transform 0.1s ease-in-out, background-color 0.1s ease-in-out, color 0.1s ease-in-out, font-size 0.1s ease-in-out;
+    /* Basic animation for appearance/movement */
+    animation: appear 0.2s ease;
+}
+
+@keyframes appear {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+/* Tile Colors - these are standard 2048 colors */
+.tile.tile-2 { background: #eee4da; color: #776e65; }
+.tile.tile-4 { background: #ede0c8; color: #776e65; }
+.tile.tile-8 { background: #f2b179; color: #f9f6f2; }
+.tile.tile-16 { background: #f59563; color: #f9f6f2; }
+.tile.tile-32 { background: #f67c5f; color: #f9f6f2; }
+.tile.tile-64 { background: #f65e3b; color: #f9f6f2; }
+.tile.tile-128 { background: #edcf72; color: #f9f6f2; font-size: 35px; }
+.tile.tile-256 { background: #edcc61; color: #f9f6f2; font-size: 35px; }
+.tile.tile-512 { background: #edc850; color: #f9f6f2; font-size: 35px; }
+.tile.tile-1024 { background: #edc53f; color: #f9f6f2; font-size: 25px; }
+.tile.tile-2048 { background: #edc22e; color: #f9f6f2; font-size: 25px; }
+.tile.tile-super { background: #3c3a32; color: #f9f6f2; font-size: 20px; } /* For tiles > 2048 */
+
+/* Tile Merging Animation Placeholder Style */
+.tile.merged {
+    animation: pop 0.2s ease 0.05s; /* Pop slightly delayed after merge */
+}
+
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Game Message (Game Over / Win) */
+.game-message {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(238, 228, 218, 0.73); /* Semi-transparent overlay */
+    z-index: 100;
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-message p {
+    font-size: 50px; /* Large message text */
+    font-weight: bold;
+    color: #776e65;
+    margin-top: 0;
+    margin-bottom: 20px;
+    animation: slide-up 0.4s ease-out;
+}
+
+@keyframes slide-up {
+    from {
+        transform: translateY(40px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.game-message .lower {
+    margin-top: 20px;
+}
+
+.retry-button {
+    background-color: #8f7a66;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 3px;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.retry-button:hover {
+    background-color: #7c6c5a;
+}
+
+.game-message.game-won p {
+    color: #f9f6f2; /* Different color for win message if desired */
+}
+
+.game-message.game-won {
+    background-color: rgba(237, 194, 46, 0.5); /* Golden overlay for win */
+}
+
+
+/* Game Explanation & Footer */
+.game-explanation {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-top: 0; /* Removed extra margin-top */
+}
+
+.footer-text {
+    font-size: 12px;
+    color: #a19386;
+    text-align: center;
+    margin-top: 20px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #d8c8b8;
+    margin: 20px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 520px) { /* Adjust breakpoint as needed */
+    body {
+        padding: 10px;
+    }
+
+    .title {
+        font-size: 36px; /* Smaller title */
+    }
+
+    .scores-container {
+        flex-direction: column; /* Stack scores vertically on small screens */
+        gap: 5px;
+    }
+
+    .score-container, .best-container {
+        padding: 8px 15px;
+        font-size: 18px;
+    }
+
+    .above-game {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch; /* Make button full width */
+    }
+
+    .game-intro {
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .restart-button {
+        text-align: center;
+    }
+
+    .game-container {
+        padding: 10px;
+        gap: 10px; /* Smaller gap for smaller screens */
+    }
+
+    .grid-container {
+        gap: 10px;
+    }
+
+    .tile {
+        font-size: 35px; /* Adjust tile font size */
+    }
+    .tile.tile-128, .tile.tile-256, .tile.tile-512 { font-size: 28px; }
+    .tile.tile-1024, .tile.tile-2048 { font-size: 20px; }
+    .tile.tile-super { font-size: 18px; }
+
+    .game-message p {
+        font-size: 30px;
+    }
+
+    .game-explanation {
+        font-size: 13px;
+    }
+}
